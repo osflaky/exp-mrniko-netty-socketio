@@ -1,0 +1,22 @@
+name: Build
+
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout'
+      uses: actions/checkout@v4
+    - name: 'Set Up Java'
+      uses: actions/setup-java@v3
+      with:
+        java-version: ${{ inputs.javaVersion }}
+        distribution: 'temurin'
+        cache: 'maven'
+    - name: 'Build Project'
+      run: |
+        export MAVEN_OPTS="-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN"
+        mvn --batch-mode --errors --fail-at-end test
+    name: build [ubuntu-latest--x64]
+    timeout-minutes: 150
